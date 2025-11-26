@@ -4,17 +4,17 @@ FROM python:3.10-slim
 # Set work directory inside container
 WORKDIR /app
 
-# Copy requirements first (if you have one)
-COPY requirements.txt .
-
-# Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt || true
-
-# Copy the entire backend folder
+# Copy the entire project (NOT only the backend folder)
 COPY . .
 
-# Expose port (Cloud Run expects the app to listen on PORT env variable)
-ENV PORT=8080
+# Install backend dependencies
+RUN pip install --no-cache-dir -r backend/requirements.txt
 
-# Command to run your backend
-CMD ["python", "quick_start.py"]
+# Expose FastAPI port
+EXPOSE 8000
+
+# Cloud Run uses $PORT, so set default for local dev
+ENV PORT=8000
+
+# Start the backend
+CMD ["python", "backend/api.py"]
