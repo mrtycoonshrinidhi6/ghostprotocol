@@ -2,7 +2,7 @@
 
 **Track:** Freestyle  
 **Team:** Solo  
-**Demo:** [YouTube Video](LINK_TO_VIDEO)  
+**Demo:** https://youtu.be/sJKvADdw0VY
 **Live Demo:** [Streamlit App](LINK_TO_DEMO)  
 
 ---
@@ -375,7 +375,7 @@ API_BASE_URL=https://ghost-protocol-backend-xxx.run.app
 
 MIT License - Contributions welcome!
 
-**Repository:** github.com/yourusername/ghostprotocol  
+**Repository:** https://github.com/mrtycoonshrinidhi6/ghostprotocol.git 
 **Docs:** ghostprotocol.dev  
 **Discord:** discord.gg/ghostprotocol  
 
