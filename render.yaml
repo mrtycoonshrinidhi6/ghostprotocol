@@ -25,7 +25,7 @@ services:
     plan: free
     branch: main
     rootDir: ghost-protocol-web
-    dockerfilePath: ghost-protocol-web/Dockerfile
+    dockerfilePath: Dockerfile
     envVars:
       - key: PORT
         value: 3000
