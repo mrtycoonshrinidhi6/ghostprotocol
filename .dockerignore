@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+env/
+venv/
+.idea/
+.git/
+.vscode/
+node_modules/
+frontend/node_modules/
+ghost-protocol-web/node_modules/
+.next/
+dist/
+build/
+*.log

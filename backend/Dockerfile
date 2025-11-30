@@ -10,12 +10,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the requirements file into the container
-COPY requirements.txt .
+# Adjusted for build context at project root
+COPY backend/requirements.txt .
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application code
+# We copy everything from root to /app so that imports like 'from agents_realtime import ...' work
 COPY . .
 
 # Expose port 8000
@@ -25,6 +27,7 @@ EXPOSE 8000
 ENV MODULE_NAME=backend.api
 ENV VARIABLE_NAME=app
 ENV PORT=8000
+ENV PYTHONPATH=/app
 
 # Run the application
 CMD ["uvicorn", "backend.api:app", "--host", "0.0.0.0", "--port", "8000"]
