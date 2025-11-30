@@ -1,0 +1,62 @@
+﻿
+D:\ML PROJECTS\ghostprotocol\ghost-protocol-web\src\app\(dashboard)\dashboard\page.tsx
+  13:12  warning  'loading' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+D:\ML PROJECTS\ghostprotocol\ghost-protocol-web\src\app\(dashboard)\death-detection\page.tsx
+   9:10  warning  'cn' is defined but never used     @typescript-eslint/no-unused-vars
+  53:18  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\ML PROJECTS\ghostprotocol\ghost-protocol-web\src\app\(dashboard)\smart-contracts\page.tsx
+  8:26  warning  'getContractStatus' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\ML PROJECTS\ghostprotocol\ghost-protocol-web\src\app\(public)\page.tsx
+  39:38  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+D:\ML PROJECTS\ghostprotocol\ghost-protocol-web\src\app\contact\page.tsx
+  11:23  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+D:\ML PROJECTS\ghostprotocol\ghost-protocol-web\src\components\DashboardSidebar.tsx
+  29:12  warning  'isMobileOpen' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     @typescript-eslint/no-unused-vars
+  77:18  error    Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+D:\ML PROJECTS\ghostprotocol\ghost-protocol-web\src\components\DashboardSidebar.tsx:77:18
+  75 |             {/* Desktop Sidebar */}
+  76 |             <aside className="hidden w-64 border-r bg-background md:block fixed inset-y-0 left-0 z-40">
+> 77 |                 <SidebarContent />
+     |                  ^^^^^^^^^^^^^^ This component is created during render
+  78 |             </aside>
+  79 |
+  80 |             {/* Mobile Trigger (To be placed in Dashboard Layout Header) */}
+
+D:\ML PROJECTS\ghostprotocol\ghost-protocol-web\src\components\DashboardSidebar.tsx:31:28
+  29 |     const [isMobileOpen, setIsMobileOpen] = useState(false);
+  30 |
+> 31 |     const SidebarContent = () => (
+     |                            ^^^^^^^
+> 32 |         <div className="flex h-full flex-col justify-between py-6">
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 33 |             <div className="space-y-6">
+     ΓÇª
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 70 |         </div>
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 71 |     );
+     | ^^^^^^ The component is created during render here
+  72 |
+  73 |     return (
+  74 |         <>  react-hooks/static-components
+
+D:\ML PROJECTS\ghostprotocol\ghost-protocol-web\src\components\ui\AuroraBackground.tsx
+  3:10  warning  'motion' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\ML PROJECTS\ghostprotocol\ghost-protocol-web\src\components\ui\SplitText.tsx
+  29:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  38:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\ML PROJECTS\ghostprotocol\ghost-protocol-web\tailwind.config.ts
+  89:15  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+Γ£û 12 problems (6 errors, 6 warnings)
+

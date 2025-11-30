@@ -141,6 +141,11 @@ async def lifespan(app: FastAPI):
     """
     try:
         deps.init_dependencies()
+        
+        # Start Loop Agent in background
+        loop_payload = {"user_id": "system_monitor", "full_name": "System Monitor"}
+        asyncio.create_task(deps.loop_agent.execute(loop_payload))
+        
         print("✅ Ghost Protocol API started successfully")
         print("🌐 Endpoint: http://0.0.0.0:8000")
     except Exception as e:
@@ -183,7 +188,8 @@ from realtime_tools import RealtimeToolRegistry
 from agents_realtime import (
     RealtimeDeathDetectionAgent,
     RealtimeDigitalAssetAgent,
-    RealtimeSmartContractAgent
+    RealtimeSmartContractAgent,
+    RealtimeLoopAgent
 )
 from memory_session import InMemorySessionService, MemoryBank
 from observability import StructuredLogger, MetricsCollector
@@ -208,6 +214,7 @@ class Dependencies:
         self.death_agent = None
         self.asset_agent = None
         self.contract_agent = None
+        self.loop_agent = None
 
         # AI Twin
         self.memorial_twin = None
@@ -236,6 +243,11 @@ class Dependencies:
 
         self.contract_agent = RealtimeSmartContractAgent(
             agent_id="smartcontract-agent-1",
+            tool_registry=self.tool_registry
+        )
+
+        self.loop_agent = RealtimeLoopAgent(
+            agent_id="loop-agent-1",
             tool_registry=self.tool_registry
         )
 
@@ -343,9 +355,26 @@ async def detect_death(
 
 async def trigger_asset_scan_background(user_id: str, session_id: str):
     """Run digital asset scan automatically after death detection."""
-    await asyncio.sleep(2)   # simulate delay / handoff
-    # You could later call deps.asset_agent.execute(...)
-    return True
+    try:
+        print(f"🚀 [Orchestrator] Triggering asset scan for session {session_id}")
+        
+        payload = {
+            "user_id": user_id,
+            "primary_email": f"{user_id}@example.com",
+            "wallet_addresses": ["0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"],
+            "trace_id": session_id,
+            "session_id": session_id
+        }
+        
+        # Execute Asset Agent
+        await deps.asset_agent.execute(payload)
+        
+        print(f"✅ [Orchestrator] Asset scan completed for session {session_id}")
+        return True
+        
+    except Exception as e:
+        print(f"❌ [Orchestrator] Asset scan failed: {e}")
+        return False
 
 # ============================================================================
 # ENDPOINT: /scan_assets
@@ -781,6 +810,30 @@ async def upload_obituary(
             status_code=500,
             detail="Obituary upload failed — invalid file or processing error"
         )
+
+# ============================================================================
+# ENDPOINT: /system_status
+# ============================================================================
+
+class SystemStatusResponse(BaseModel):
+    status: str
+    active_agents: int
+    uptime: str
+    assets_secured: int
+    version: str
+
+@app.get("/api/v1/system_status", response_model=SystemStatusResponse)
+async def get_system_status(deps: Dependencies = Depends(get_dependencies)):
+    """
+    Return global system health and metrics for the dashboard.
+    """
+    return SystemStatusResponse(
+        status="Online",
+        active_agents=4,  # Death, Asset, Contract, Loop
+        uptime="99.9%",
+        assets_secured=12, # Mock aggregate count
+        version="2.0.0"
+    )
 # ============================================================================
 # ENDPOINT: /diagnostics/keys
 # ============================================================================

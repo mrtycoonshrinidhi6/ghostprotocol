@@ -81,6 +81,7 @@ ghostprotocol/
 ### Option 1: Automated (Recommended)
 ```bash
 python run.py
+$env:PYTHONIOENCODING='utf-8'; venv\Scripts\python.exe run.py
 ```
 
 ### Option 2: Manual

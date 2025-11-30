@@ -45,10 +45,12 @@ class SessionMetadata:
 class InMemorySessionService:
     """Manages session lifecycle and state transitions"""
     
-    def __init__(self):
+    def __init__(self, persistence_file: str = "sessions.json"):
         self.sessions: Dict[str, SessionMetadata] = {}
         self.session_data: Dict[str, Dict] = {}
         self.state_history: Dict[str, List[Dict]] = {}
+        self.persistence_file = persistence_file
+        self._load_from_disk()
     
     def create_session(self, user_id: str) -> str:
         """Create new session"""
@@ -69,6 +71,7 @@ class InMemorySessionService:
             "timestamp": datetime.now().isoformat()
         }]
         
+        self._save_to_disk()
         return session_id
     
     def get_session(self, session_id: str) -> Optional[SessionMetadata]:
@@ -97,12 +100,70 @@ class InMemorySessionService:
             "agent": agent,
             "timestamp": datetime.now().isoformat()
         })
+        
+        self._save_to_disk()
     
     def set_data(self, session_id: str, key: str, value: Any):
         """Store data in session"""
         if session_id not in self.session_data:
             raise ValueError(f"Session {session_id} not found")
         self.session_data[session_id][key] = value
+        self._save_to_disk()
+        
+    def _save_to_disk(self):
+        """Persist session state to disk"""
+        try:
+            data = {
+                "sessions": {
+                    sid: {
+                        "session_id": s.session_id,
+                        "user_id": s.user_id,
+                        "created_at": s.created_at.isoformat(),
+                        "updated_at": s.updated_at.isoformat(),
+                        "state": s.state.value,
+                        "current_agent": s.current_agent,
+                        "checkpoint": s.checkpoint,
+                        "error": s.error
+                    } for sid, s in self.sessions.items()
+                },
+                "session_data": self.session_data,
+                "state_history": self.state_history
+            }
+            
+            with open(self.persistence_file, 'w') as f:
+                json.dump(data, f, indent=2, default=str)
+                
+        except Exception as e:
+            print(f"Failed to save sessions: {e}")
+
+    def _load_from_disk(self):
+        """Load session state from disk"""
+        import os
+        if not os.path.exists(self.persistence_file):
+            return
+            
+        try:
+            with open(self.persistence_file, 'r') as f:
+                data = json.load(f)
+                
+            self.session_data = data.get("session_data", {})
+            self.state_history = data.get("state_history", {})
+            
+            # Reconstruct SessionMetadata objects
+            for sid, s_dict in data.get("sessions", {}).items():
+                self.sessions[sid] = SessionMetadata(
+                    session_id=s_dict["session_id"],
+                    user_id=s_dict["user_id"],
+                    created_at=datetime.fromisoformat(s_dict["created_at"]),
+                    updated_at=datetime.fromisoformat(s_dict["updated_at"]),
+                    state=SessionState(s_dict["state"]),
+                    current_agent=s_dict.get("current_agent"),
+                    checkpoint=s_dict.get("checkpoint"),
+                    error=s_dict.get("error")
+                )
+                
+        except Exception as e:
+            print(f"Failed to load sessions: {e}")
     
     def get_data(self, session_id: str, key: str) -> Any:
         """Retrieve data from session"""

@@ -27,399 +27,221 @@ st.set_page_config(
 
 
 # ========================================================================
-# NOTION THEME (HIGH CONTRAST)
+# GHOST PROTOCOL THEME (CYBERPUNK DARK)
 # ========================================================================
 
-def inject_notion_theme():
-    """Inject Notion-style high-contrast theme with maximum visibility."""
+def inject_ghost_theme():
+    """Inject Ghost Protocol Dark Theme (Cyberpunk/Futuristic)."""
     st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
 
-    /* Global Reset - High Contrast */
+    /* Global Reset */
     * {
-        font-family: 'Inter', sans-serif !important;
+        font-family: 'Inter', sans-serif;
     }
 
     /* Main App Background */
     .stApp {
-        background-color: #FFFFFF !important;
-        color: #000000 !important;
+        background-color: #0E1117 !important;
+        color: #E0E0E0 !important;
     }
 
-    /* All Text Elements - Pure Black on White */
-    * {
-        color: #000000 !important;
-    }
-    
-    body, div, p, span, label, input, textarea, select, button, a, li, ul, ol {
-        color: #000000 !important;
-    }
-    
-    /* Override any Streamlit-specific classes */
-    .st-emotion-cache-1pr8puy,
-    .st-emotion-cache-1pr8puy *,
-    [class*="st-emotion"],
-    [class*="emotion"] {
-        color: #000000 !important;
-    }
-    
-    /* Force all paragraph and text elements */
-    p, span, div, label, input, textarea {
-        color: #000000 !important;
-    }
-
-    /* Headers - Bold Black */
-    h1, h2, h3, h4, h5, h6 {
-        color: #000000 !important;
-        font-weight: 600 !important;
-    }
-
-    /* Sidebar - Light Gray Background */
+    /* Sidebar */
     [data-testid="stSidebar"] {
-        background-color: #F5F5F5 !important;
-        border-right: 2px solid #CCCCCC;
-        padding: 1.5rem;
+        background-color: #161B22 !important;
+        border-right: 1px solid #30363D;
     }
 
     [data-testid="stSidebar"] * {
-        color: #000000 !important;
+        color: #E0E0E0 !important;
     }
 
-    [data-testid="stSidebar"] h1 {
-        font-size: 20px !important;
-        font-weight: 700 !important;
-        color: #000000 !important;
-    }
-
-    [data-testid="stSidebar"] .stRadio label {
-        font-size: 17px !important;
-        font-weight: 500 !important;
-        color: #000000 !important;
-    }
-
-    /* Buttons - Teal/Cyan Brand Color */
-    .stButton > button {
-        background-color: #2af5ba !important;
-        color: #000000 !important;
-        border: 2px solid #2af5ba !important;
+    /* Headers */
+    h1, h2, h3, h4, h5, h6 {
+        color: #FFFFFF !important;
         font-weight: 600 !important;
-        padding: 0.5rem 1rem !important;
-        border-radius: 6px !important;
-        transition: all 0.2s ease !important;
+        letter-spacing: -0.5px;
+    }
+
+    h1 {
+        background: linear-gradient(90deg, #FFFFFF, #A0A0A0);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    /* Buttons */
+    .stButton > button {
+        background-color: #1E2127 !important;
+        color: #00FFA3 !important;
+        border: 1px solid #00FFA3 !important;
+        font-weight: 600 !important;
+        border-radius: 4px !important;
+        transition: all 0.3s ease !important;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 14px !important;
     }
 
     .stButton > button:hover {
-        background-color: #1ad9a3 !important;
-        border-color: #1ad9a3 !important;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(42, 245, 186, 0.3) !important;
-    }
-
-    /* Input Fields - Black Text on White */
-    .stTextInput input, .stTextArea textarea, .stSelectbox select {
-        background-color: #FFFFFF !important;
+        background-color: #00FFA3 !important;
         color: #000000 !important;
-        border: 2px solid #CCCCCC !important;
-        border-radius: 6px !important;
+        box-shadow: 0 0 15px rgba(0, 255, 163, 0.4) !important;
+        border-color: #00FFA3 !important;
     }
 
-    .stTextInput input:focus, .stTextArea textarea:focus {
-        border-color: #000000 !important;
-        box-shadow: 0 0 0 2px rgba(0,0,0,0.1) !important;
-    }
-
-    /* Multi-select */
-    .stMultiSelect > div {
-        background-color: #FFFFFF !important;
+    /* Primary Buttons (if any) */
+    button[kind="primary"] {
+        background-color: #00FFA3 !important;
         color: #000000 !important;
-        border: 2px solid #CCCCCC !important;
-    }
-
-    /* Checkboxes */
-    .stCheckbox label {
-        color: #000000 !important;
-        font-weight: 500 !important;
+        border: none !important;
     }
 
     /* Cards */
-    .notion-card {
-        background: #FFFFFF !important;
-        border: 2px solid #DDDDDD !important;
-        border-radius: 10px;
-        padding: 20px;
-        margin-bottom: 20px;
-        transition: 0.2s ease;
-    }
-
-    .notion-card h3 {
-        color: #000000 !important;
-        font-weight: 600 !important;
-    }
-
-    .notion-card p {
-        color: #333333 !important;
-    }
-
-    .notion-card:hover {
-        border-color: #000000 !important;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
-    }
-
-    /* Status Banners */
-    .backend-offline-banner {
-        background: #FFE5E5 !important;
-        border: 2px solid #FF0000 !important;
+    .ghost-card {
+        background: #161B22;
+        border: 1px solid #30363D;
         border-radius: 8px;
-        padding: 16px;
-        color: #CC0000 !important;
-        font-weight: 600 !important;
+        padding: 24px;
         margin-bottom: 20px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
     }
 
-    .backend-online-banner {
-        background: #E0FFE0 !important;
-        border: 2px solid #00AA00 !important;
-        border-radius: 8px;
-        padding: 16px;
-        color: #006600 !important;
-        font-weight: 600 !important;
-        margin-bottom: 20px;
+    .ghost-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: #00FFA3;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .ghost-card:hover {
+        transform: translateY(-5px);
+        border-color: #00FFA3;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .ghost-card:hover::before {
+        opacity: 1;
+    }
+
+    .ghost-card h3 {
+        color: #00FFA3 !important;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+    }
+
+    .ghost-card p {
+        color: #8B949E !important;
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    /* Inputs */
+    .stTextInput input, .stTextArea textarea, .stSelectbox select {
+        background-color: #0D1117 !important;
+        color: #E0E0E0 !important;
+        border: 1px solid #30363D !important;
+        border-radius: 4px !important;
+    }
+
+    .stTextInput input:focus, .stTextArea textarea:focus {
+        border-color: #00FFA3 !important;
+        box-shadow: 0 0 0 1px #00FFA3 !important;
     }
 
     /* Metrics */
     [data-testid="stMetricValue"] {
-        color: #000000 !important;
-        font-size: 32px !important;
-        font-weight: 700 !important;
+        color: #00FFA3 !important;
+        font-family: 'JetBrains Mono', monospace;
     }
 
     [data-testid="stMetricLabel"] {
-        color: #000000 !important;
-        font-size: 16px !important;
-        font-weight: 600 !important;
+        color: #8B949E !important;
     }
 
-    /* Progress Bars */
-    .stProgress > div > div {
-        background-color: #000000 !important;
+    /* Status Banners */
+    .backend-online-banner {
+        background: rgba(0, 255, 163, 0.1);
+        border: 1px solid #00FFA3;
+        color: #00FFA3;
+        padding: 12px;
+        border-radius: 4px;
+        font-family: 'JetBrains Mono', monospace;
+        display: flex;
+        align-items: center;
+        gap: 10px;
     }
 
-    /* Tables/DataFrames */
-    .dataframe {
-        color: #000000 !important;
-        border: 2px solid #CCCCCC !important;
+    .backend-offline-banner {
+        background: rgba(255, 75, 75, 0.1);
+        border: 1px solid #FF4B4B;
+        color: #FF4B4B;
+        padding: 12px;
+        border-radius: 4px;
+        font-family: 'JetBrains Mono', monospace;
     }
 
-    .dataframe th {
-        background-color: #F0F0F0 !important;
-        color: #000000 !important;
-        font-weight: 700 !important;
-        border: 1px solid #CCCCCC !important;
-    }
-
-    .dataframe td {
-        color: #000000 !important;
-        border: 1px solid #E5E5E5 !important;
-    }
-
-    /* Tabs */
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 8px;
-    }
-
-    .stTabs [data-baseweb="tab"] {
-        background-color: #F5F5F5 !important;
-        color: #000000 !important;
-        border: 2px solid #DDDDDD !important;
-        font-weight: 600 !important;
-        padding: 10px 20px !important;
-    }
-
-    .stTabs [aria-selected="true"] {
-        background-color: #000000 !important;
-        color: #FFFFFF !important;
-        border-color: #000000 !important;
-    }
-
-    /* Expanders */
+    /* Expander */
     .streamlit-expanderHeader {
-        background-color: #F5F5F5 !important;
-        color: #000000 !important;
-        font-weight: 600 !important;
-        border: 2px solid #DDDDDD !important;
-    }
-
-    .streamlit-expanderContent {
-        background-color: #FAFAFA !important;
-        border: 2px solid #DDDDDD !important;
-        color: #000000 !important;
-    }
-
-    /* Code Blocks */
-    code {
-        background-color: #F5F5F5 !important;
-        color: #000000 !important;
-        padding: 2px 6px !important;
+        background-color: #161B22 !important;
+        color: #E0E0E0 !important;
+        border: 1px solid #30363D !important;
         border-radius: 4px !important;
-        border: 1px solid #DDDDDD !important;
+        padding-left: 40px !important;
+    }
+    
+    .streamlit-expanderContent {
+        background-color: #0D1117 !important;
+        border: 1px solid #30363D !important;
+        border-top: none !important;
+        color: #E0E0E0 !important;
     }
 
-    pre {
-        background-color: #F5F5F5 !important;
-        color: #000000 !important;
-        border: 2px solid #DDDDDD !important;
-        padding: 12px !important;
-        border-radius: 6px !important;
+    /* Code */
+    code {
+        background-color: #161B22 !important;
+        color: #00FFA3 !important;
+        border: 1px solid #30363D !important;
+        font-family: 'JetBrains Mono', monospace !important;
     }
 
-    /* Alerts/Info/Warning/Success */
-    .stAlert {
-        color: #000000 !important;
-        font-weight: 500 !important;
+    /* Progress Bar */
+    .stProgress > div > div {
+        background-color: #00FFA3 !important;
     }
 
-    [data-testid="stNotification"] {
-        background-color: #F0F0F0 !important;
-        color: #000000 !important;
-        border: 2px solid #CCCCCC !important;
-    }
-
-    /* Spinner */
-    .stSpinner > div {
-        border-top-color: #000000 !important;
-    }
-
-    /* Chat Messages */
-    .stChatMessage {
-        background-color: #F5F5F5 !important;
-        border: 2px solid #DDDDDD !important;
-        color: #000000 !important;
-    }
-
-    /* Links */
-    a {
-        color: #0066CC !important;
-        font-weight: 600 !important;
-        text-decoration: underline !important;
-    }
-
-    a:hover {
-        color: #0044AA !important;
+    /* Radio Buttons */
+    .stRadio label {
+        color: #E0E0E0 !important;
     }
 
     /* Dividers */
-    .section-divider {
-        border-top: 2px solid #DDDDDD;
-        margin: 30px 0;
-    }
-
     hr {
-        border-color: #DDDDDD !important;
-        border-width: 2px !important;
+        border-color: #30363D !important;
+    }
+    
+    /* JSON */
+    .stJson {
+        background-color: #0D1117;
+        padding: 10px;
+        border-radius: 4px;
+        border: 1px solid #30363D;
     }
 
-    /* Hide Streamlit Branding */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
-
-    /* Animation */
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(8px); }
-        to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .fade-in {
-        animation: fadeIn 0.3s ease-in-out;
-    }
-    
-    /* FINAL OVERRIDE - Kill all cyan/blue colors, force black text */
-    * {
-        color: #000000 !important;
-    }
-    
-    /* Specific overrides for common elements */
-    body *, 
-    .stApp *, 
-    .main *, 
-    [data-testid] *, 
-    div, p, span, label, input, textarea, select, button, a, h1, h2, h3, h4, h5, h6 {
-        color: #000000 !important;
-    }
-    
-    /* Kill any specific cyan/blue/red colors */
-    [style*="#73e8f1"],
-    [style*="#b1e5ec"],
-    [style*="#be5050"],
-    [style*="rgb(115, 232, 241)"],
-    [style*="rgb(177, 229, 236)"],
-    [style*="rgb(190, 80, 80)"] {
-        color: #000000 !important;
-    }
-    
-    /* Extra aggressive override for all elements */
-    html *, body *, div *, p *, span *, label *, 
-    .stApp *, .main *, [data-testid] *,
-    input, textarea, select, button, a, h1, h2, h3, h4, h5, h6 {
-        color: #000000 !important;
-    }
-    
-    /* NUCLEAR OPTION - Override EVERYTHING with black text */
-    html, body, div, p, span, label, input, textarea, select, a, li, ul, ol,
-    h1, h2, h3, h4, h5, h6, strong, em, code, pre, blockquote,
-    .stMarkdown, .stText, .stCaption, .stTitle, .stHeader,
-    [class*="st"], [class*="emotion"], [data-testid] {
-        color: #000000 !important;
-    }
-    
-    /* Preserve button text as black even with colored backgrounds */
-    button, .stButton button, input[type="button"], input[type="submit"] {
-        color: #000000 !important;
-    }
-    
-    /* Streamlit alert boxes - keep colored backgrounds but ensure text is readable */
-    .stAlert, [data-baseweb="notification"] {
-        color: #000000 !important;
-    }
-    
-    /* Object inspector container background */
-    div.object-key-val {
-        background-color: #ADD8E6 !important;
-    }
-    
-    /* Success messages - keep green background, black text */
-    .stSuccess, [kind="success"] {
-        background-color: #E0FFE0 !important;
-        color: #006600 !important;
-        border: 2px solid #00AA00 !important;
-    }
-    
-    /* Warning messages - keep yellow background, black text */
-    .stWarning, [kind="warning"] {
-        background-color: #FFF9E6 !important;
-        color: #997700 !important;
-        border: 2px solid #FFCC00 !important;
-    }
-    
-    /* Error messages - keep red background, dark red text */
-    .stError, [kind="error"] {
-        background-color: #FFE5E5 !important;
-        color: #CC0000 !important;
-        border: 2px solid #FF0000 !important;
-    }
-    
-    /* Info messages - keep blue background, dark blue text */
-    .stInfo, [kind="info"] {
-        background-color: #E6F3FF !important;
-        color: #004085 !important;
-        border: 2px solid #0066CC !important;
-    }
     </style>
     """, unsafe_allow_html=True)
 
 
-inject_notion_theme()
+inject_ghost_theme()
 
 
 # ========================================================================
@@ -452,6 +274,18 @@ if "diagnostics" not in st.session_state:
 
 if "last_memorial_message" not in st.session_state:
     st.session_state.last_memorial_message = None
+
+if "current_page" not in st.session_state:
+    st.session_state.current_page = "🏛️ Dashboard"
+
+
+# ========================================================================
+# NAVIGATION CALLBACK
+# ========================================================================
+
+def set_page(page_name):
+    """Callback to update the current page safely."""
+    st.session_state.current_page = page_name
 
 
 # ========================================================================
@@ -592,7 +426,7 @@ with st.sidebar:
             "📜 Smart Contract",
             "🕊️ Memorial Chat"
         ],
-        label_visibility="collapsed"
+        key="current_page"
     )
 
     st.markdown("---")
@@ -631,33 +465,37 @@ if page == "🏛️ Dashboard":
 
     with col1:
         st.markdown("""
-        <div class="notion-card fade-in">
+        <div class="ghost-card fade-in">
             <h3>⚰️ Death Detection</h3>
             <p>Multi-source verification using obituaries, email, social media, and death registries.</p>
         </div>
         """, unsafe_allow_html=True)
+        st.button("Launch Death Detection", use_container_width=True, on_click=set_page, args=("⚰️ Death Detection",))
 
         st.markdown("""
-        <div class="notion-card fade-in">
+        <div class="ghost-card fade-in">
             <h3>💼 Asset Discovery</h3>
             <p>Automatic scanning of cloud storage, crypto wallets, email accounts, and digital services.</p>
         </div>
         """, unsafe_allow_html=True)
+        st.button("Launch Asset Discovery", use_container_width=True, on_click=set_page, args=("💼 Asset Discovery",))
 
     with col2:
         st.markdown("""
-        <div class="notion-card fade-in">
+        <div class="ghost-card fade-in">
             <h3>📜 Smart Contract</h3>
             <p>Decentralized execution of your digital will on Polygon blockchain.</p>
         </div>
         """, unsafe_allow_html=True)
+        st.button("Launch Smart Contract", use_container_width=True, on_click=set_page, args=("📜 Smart Contract",))
 
         st.markdown("""
-        <div class="notion-card fade-in">
+        <div class="ghost-card fade-in">
             <h3>🕊️ Memorial Chat</h3>
             <p>AI-driven memory twin providing emotional comfort to loved ones.</p>
         </div>
         """, unsafe_allow_html=True)
+        st.button("Launch Memorial Chat", use_container_width=True, on_click=set_page, args=("🕊️ Memorial Chat",))
 
     st.markdown("---")
 

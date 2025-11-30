@@ -386,9 +386,9 @@ MIT License - Contributions welcome!
 Solo developer passionate about AI agents and blockchain. Built Ghost Protocol to solve a real problem: my grandfather's digital assets were lost forever because nobody knew his passwords.
 
 **Contact:**
-- Email: builder@ghostprotocol.dev
-- Twitter: @ghostprotocol
-- LinkedIn: linkedin.com/in/ghostprotocol
+- Email: mrtycoonshrinidhi.6@gmail.com
+- Twitter: @mr_tycoon006
+- LinkedIn: https://www.linkedin.com/in/shrinidhi-h-v
 
 ---
 

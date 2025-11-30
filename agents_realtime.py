@@ -275,79 +275,61 @@ class RealtimeDigitalAssetAgent:
             
             start_time = datetime.now()
             
-            # 1. MCP Tool: Blockchain balance check
-            span.add_child_span("blockchain_scan")
-            self.logger.info("Scanning crypto wallets")
+            # Define parallel tasks
+            task_blockchain = self.tools.execute_tool("fetch_blockchain_balance", {
+                "address": input_data.get("wallet_addresses", [""])[0], # Simplified for parallel demo
+                "chains": ["ETH", "BTC", "MATIC"],
+                "include_tokens": True
+            })
             
-            try:
-                for wallet_address in input_data.get("wallet_addresses", []):
-                    balance_result = await self.tools.execute_tool("fetch_blockchain_balance", {
-                        "address": wallet_address,
-                        "chains": ["ETH", "BTC", "MATIC"],
-                        "include_tokens": True
-                    })
-                    
-                    assets["crypto_wallets"].extend(balance_result["balances"])
-                    
-                    self.logger.info(
-                        f"Wallet {wallet_address[:10]}... scanned",
-                        metadata={
-                            "total_usd": balance_result["total_usd"],
-                            "chains": len(balance_result["balances"])
-                        }
-                    )
-                
-                self.metrics.record_tool_latency(
-                    tool_name="fetch_blockchain_balance",
-                    latency_ms=(datetime.now() - start_time).total_seconds() * 1000
+            task_email = self.tools.execute_tool("get_recent_emails", {
+                "email_address": input_data.get("primary_email", ""),
+                "days_back": 90
+            })
+            
+            task_cloud = self.tools.execute_tool("get_cloud_activity", {
+                "user_id": input_data["user_id"],
+                "services": ["gdrive", "dropbox", "onedrive"],
+                "days_back": 90
+            })
+            
+            # Execute in parallel
+            self.logger.info("Starting parallel asset scans (Blockchain, Email, Cloud)")
+            results = await asyncio.gather(task_blockchain, task_email, task_cloud, return_exceptions=True)
+            
+            blockchain_res, email_res, cloud_res = results
+            
+            # Process Blockchain Results
+            if isinstance(blockchain_res, Exception):
+                self.logger.error(f"Blockchain scan failed: {blockchain_res}")
+            else:
+                assets["crypto_wallets"].extend(blockchain_res.get("balances", []))
+                self.logger.info(
+                    f"Wallet scanned",
+                    metadata={"total_usd": blockchain_res.get("total_usd", 0)}
                 )
-                
-            except Exception as e:
-                self.logger.error(f"Blockchain scan failed: {e}")
-            
-            # 2. MCP Tool: Email account discovery
-            span.add_child_span("email_scan")
-            
-            try:
-                email_result = await self.tools.execute_tool("get_recent_emails", {
-                    "email_address": input_data.get("primary_email", ""),
-                    "days_back": 90
-                })
-                
-                # Parse email providers from activity
+
+            # Process Email Results
+            if isinstance(email_res, Exception):
+                self.logger.error(f"Email scan failed: {email_res}")
+            else:
                 assets["email_accounts"].append({
                     "provider": "gmail",
                     "email": input_data.get("primary_email", ""),
-                    "total_emails": email_result["total_count"],
-                    "last_activity": email_result["timestamp"]
+                    "total_emails": email_res.get("total_count", 0),
+                    "last_activity": email_res.get("timestamp", "")
                 })
-                
+                self.logger.info(f"Email scan found {email_res.get('total_count', 0)} emails")
+
+            # Process Cloud Results
+            if isinstance(cloud_res, Exception):
+                self.logger.error(f"Cloud scan failed: {cloud_res}")
+            else:
+                assets["cloud_storage"].extend(cloud_res.get("activity", []))
                 self.logger.info(
-                    f"Email scan found {email_result['total_count']} emails"
+                    f"Cloud scan found {cloud_res.get('total_files', 0)} files",
+                    metadata={"services": len(cloud_res.get("activity", []))}
                 )
-                
-            except Exception as e:
-                self.logger.error(f"Email scan failed: {e}")
-            
-            # 3. MCP Tool: Cloud storage activity
-            span.add_child_span("cloud_scan")
-            
-            try:
-                cloud_result = await self.tools.execute_tool("get_cloud_activity", {
-                    "user_id": input_data["user_id"],
-                    "services": ["gdrive", "dropbox", "onedrive"],
-                    "days_back": 90
-                })
-                
-                assets["cloud_storage"].extend(cloud_result["activity"])
-                
-                self.logger.info(
-                    f"Cloud scan found {cloud_result['total_files']} files, {cloud_result['storage_used_gb']:.1f} GB",
-                    metadata={"services": len(cloud_result["activity"])}
-                )
-                
-            except Exception as e:
-                self.logger.error(f"Cloud scan failed: {e}")
             
             # Calculate totals
             total_assets = (
